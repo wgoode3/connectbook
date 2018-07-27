@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Connectbook!!!</h1>
+    <p>{{users}}</p>
+    <table border=1>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Number Connections</th>
+            <th>Connections</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.connections.all|length}}</td>
+            <td>
+                {% for connection in user.connections.all %}
+                    {{connection.name}}, 
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <hr>
+    <form action="/user" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" required placeholder="Your name..."><br>
+        <input type="email" name="email" required placeholder="Your email..."><br>
+        <input type="submit" value="Add a new user">
+    </form>
+    <hr>
+    <form action="/connect" method="post">
+        {% csrf_token %}
+        <select name="connecting">
+            {% for user in users %}
+                <option value="{{user.id}}">{{user.name}}</option>
+            {% endfor %}
+        </select>
+        <select name="connected">
+            {% for user in users %}
+                <option value="{{user.id}}">{{user.name}}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="connect these users">
+    </form>
+</body>
+</html>
